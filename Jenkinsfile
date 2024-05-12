@@ -1,39 +1,36 @@
 pipeline {
-    agent { label "dev-server"}
+    agent any
     
     stages {
-        
-        stage("code"){
-            steps{
-                git url: "https://github.com/LondheShubham153/node-todo-cicd.git", branch: "master"
-                echo 'bhaiyya code clone ho gaya'
+        stage("code") {
+            steps {
+                git url: "https://github.com/arpita199812/node-todo-cicd.git", branch: "master"
+                echo 'Code cloned successfully.'
             }
         }
-        stage("build and test"){
-            steps{
-                sh "docker build -t node-app-test-new ."
-                echo 'code build bhi ho gaya'
-            }
-        }
-        stage("scan image"){
-            steps{
-                echo 'image scanning ho gayi'
-            }
-        }
-        stage("push"){
-            steps{
-                withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
-                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                sh "docker tag node-app-test-new:latest ${env.dockerHubUser}/node-app-test-new:latest"
-                sh "docker push ${env.dockerHubUser}/node-app-test-new:latest"
-                echo 'image push ho gaya'
+        stage("build and test") {
+            steps {
+                script {
+                    bat "docker build -t arpita199812/node-app-test-new ."
+                    echo 'Code built successfully.'
                 }
             }
         }
-        stage("deploy"){
-            steps{
-                sh "docker-compose down && docker-compose up -d"
-                echo 'deployment ho gayi'
+        stage("push") {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker-hub', url: 'https://index.docker.io/v1/') {
+                        docker.image('arpita199812/node-app-test-new:latest').push()
+                    }
+                }
+            }
+        }
+        stage("deploy") {
+            steps {
+                script {
+                    bat "docker-compose down && docker-compose up -d"
+                    echo 'Deployment completed successfully.'
+                }
             }
         }
     }
