@@ -13,7 +13,7 @@ pipeline {
     SCANNER_HOME = tool 'sonarqube'  // sonar-scanner is the name of the tool in the manage jenkins> tool configuration
    }
    steps {
-    withSonarQubeEnv(credentialsId: 'sonar-qube', installationName: 'Sonarqube') {  //installationName is the name of sonar installation in manage jenkins>configure system
+    withSonarQubeEnv(credentialsId: 'sonar-qube', installationName: 'sonarqube') {  //installationName is the name of sonar installation in manage jenkins>configure system
      bat "%SCANNER_HOME%/bin/sonar-scanner \
      -Dsonar.projectKey=arpita199812_todo-app-scan \
      -Dsonar.sources=. \
