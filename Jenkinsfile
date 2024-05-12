@@ -10,11 +10,11 @@ pipeline {
         }
         stage("Sonarqube Analysis") {
            environment {
-    SCANNER_HOME = tool 'sonarqube'  // sonar-scanner is the name of the tool in the manage jenkins> tool configuration
+    SONAR_RUNNER_HOME = tool 'sonarqube'  // sonar-scanner is the name of the tool in the manage jenkins> tool configuration
    }
    steps {
     withSonarQubeEnv(credentialsId: 'sonar-qube', installationName: 'sonarqube') {  //installationName is the name of sonar installation in manage jenkins>configure system
-     bat "%SCANNER_HOME%/bin/sonar-scanner \
+     bat "%SONAR_RUNNER_HOME%/bin/sonar-scanner \
      -Dsonar.projectKey=arpita199812_todo-app-scan \
      -Dsonar.sources=. \
      -Dsonar.host.url=http://localhost:9000 \
