@@ -8,6 +8,12 @@ pipeline {
                 echo 'Code cloned successfully.'
             }
         }
+        stage('OWASP Dependency Check') {
+            steps {
+                dependencyCheck additionalArguments: '--scan views/', odcInstallation: 'dc'
+                     dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
         stage("build and test") {
             steps {
                 script {
